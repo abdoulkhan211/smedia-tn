@@ -468,6 +468,21 @@
         </a>
     </nav>
 <script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+            // Simule un temps de chargement (2 secondes)
+            setTimeout(function() {
+                const preloader = document.getElementById('preloader');
+                const mainContent = document.getElementById('mainContent');
+                
+                // Fade out du preloader
+                preloader.style.opacity = '0';
+                preloader.style.visibility = 'hidden';
+                
+                // Affiche le contenu principal
+                mainContent.style.display = 'block';
+            }, 2000); // 2000ms = 2 secondes
+        });
 document.getElementById('androminForm').addEventListener('submit', function(e) {
     e.preventDefault();
     const form = e.target;
