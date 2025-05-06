@@ -253,20 +253,7 @@
             max-width: 600px;
         }
         
-        .search-bar input {
-            padding: 12px 20px;
-            width: 100%;
-            font-size: 16px;
-            border: 2px solid #ddd;
-            border-radius: 50px;
-            outline: none;
-            transition: all 0.3s ease;
-        }
         
-        .search-bar input:focus {
-            border-color: var(--primary-orange);
-            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.2);
-        }
         
         .video-container {
             display: grid;
@@ -533,6 +520,77 @@
                 grid-template-columns: 1fr;
             }
         }
+
+            .search-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        
+        #searchInput {
+            width: 100%;
+            padding: 12px 20px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            font-size: 16px;
+            box-sizing: border-box;
+            outline: none;
+            transition: all 0.3s;
+        }
+        
+        #searchInput:focus {
+            border-color: #4CAF50;
+            box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+        }
+        
+        #searchResults {
+            position: absolute;
+            width: 100%;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-top: none;
+            border-radius: 0 0 5px 5px;
+            background: white;
+            z-index: 1000;
+            display: none;
+        }
+        
+        .result-item {
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .result-item:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .no-results {
+            padding: 10px;
+            color: #777;
+            font-style: italic;
+        }
+        
+        .search-icon {
+            position: absolute;
+            right: 15px;
+            top: 12px;
+            color: #aaa;
+            cursor: pointer;
+        }
+        
+        .clear-icon {
+            position: absolute;
+            right: 45px;
+            top: 12px;
+            color: #aaa;
+            cursor: pointer;
+            display: none;
+        }
+        
+        .clear-icon:hover, .search-icon:hover {
+            color: #555;
+        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
@@ -546,10 +604,12 @@
         </div>
     </section>
 
-            <div class="search-bar">
-                <input type="text" id="searchInput" placeholder="Rechercher une vidéo HTML..." onkeyup="filterVideos()">
-            </div>
-            
+             <div class="search-container">
+        <input type="search" id="searchInput" placeholder="Rechercher..." autocomplete="off">
+        <span class="clear-icon" id="clearSearch">×</span>
+        <span class="search-icon" id="searchButton">rechercher 🔍</span>
+        <div id="searchResults"></div>
+    </div>
             <div class="video-container" id="videoContainer">
                 <!-- Vidéo 1 -->
                 <div class="video-card" data-title="HTML complet pour débutants" data-level="beginner" data-duration="2h30">
@@ -596,12 +656,7 @@
         </a>
     </nav>
 <script>
-        // Filtre de recherche
-        function filterVideos() {
-            const input = document.getElementById('searchInput').value.toLowerCase();
-            const videos = document.querySelectorAll('.video-card');
-            const activeLevel = document.querySelector('.level-btn.active').dataset.level;
-
+        
             videos.forEach(video => {
                 const title = video.getAttribute('data-title').toLowerCase();
                 const level = video.getAttribute('data-level');
@@ -617,21 +672,140 @@
             });
         }
 
-        // Filtre par niveau
-        document.querySelectorAll('.level-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                filterVideos();
-            });
-        });
-
+        
         // Pagination
         document.querySelectorAll('.page-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 document.querySelectorAll('.page-btn').forEach(b => b.classList.remove('active'));
                 this.classList.add('active');
                 // Ici vous pourriez ajouter une logique pour charger d'autres vidéos
+            });
+        });
+
+    document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInput');
+            const searchResults = document.getElementById('searchResults');
+            const clearSearch = document.getElementById('clearSearch');
+            const searchButton = document.getElementById('searchButton');
+            const articles = document.querySelectorAll('.article');
+            
+            // Données de recherche (peut être remplacé par une API)
+            const searchData = Array.from(articles).map(article => ({
+                title: article.getAttribute('data-title'),
+                tags: article.getAttribute('data-tags').split(', '),
+                element: article
+            }));
+            
+            // Afficher/masquer l'icône de suppression
+            searchInput.addEventListener('input', function() {
+                if (this.value.length > 0) {
+                    clearSearch.style.display = 'block';
+                    performSearch(this.value);
+                } else {
+                    clearSearch.style.display = 'none';
+                    searchResults.style.display = 'none';
+                }
+            });
+            
+            // Effacer la recherche
+            clearSearch.addEventListener('click', function() {
+                searchInput.value = '';
+                searchResults.style.display = 'none';
+                this.style.display = 'none';
+                resetArticlesDisplay();
+            });
+            
+            // Recherche lors du clic sur l'icône
+            searchButton.addEventListener('click', function() {
+                if (searchInput.value.length > 0) {
+                    performSearch(searchInput.value);
+                }
+            });
+            
+            // Recherche lors de la touche Entrée
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && this.value.length > 0) {
+                    performSearch(this.value);
+                }
+            });
+            
+            // Fonction de recherche
+            function performSearch(query) {
+                const lowerQuery = query.toLowerCase();
+                const results = searchData.filter(item => {
+                    return item.title.toLowerCase().includes(lowerQuery) || 
+                           item.tags.some(tag => tag.toLowerCase().includes(lowerQuery));
+                });
+                
+                displayResults(results, query);
+                highlightArticles(results);
+            }
+            
+            // Afficher les résultats
+            function displayResults(results, query) {
+                searchResults.innerHTML = '';
+                
+                if (results.length === 0) {
+                    const noResults = document.createElement('div');
+                    noResults.className = 'no-results';
+                    noResults.textContent = `Aucun résultat pour "${query}"`;
+                    searchResults.appendChild(noResults);
+                } else {
+                    results.forEach(result => {
+                        const resultItem = document.createElement('div');
+                        resultItem.className = 'result-item';
+                        resultItem.textContent = result.title;
+                        
+                        resultItem.addEventListener('click', function() {
+                            searchInput.value = result.title;
+                            searchResults.style.display = 'none';
+                            highlightSpecificArticle(result.element);
+                        });
+                        
+                        searchResults.appendChild(resultItem);
+                    });
+                }
+                
+                searchResults.style.display = results.length > 0 ? 'block' : 'none';
+            }
+            
+            // Mettre en surbrillance les articles correspondants
+            function highlightArticles(results) {
+                articles.forEach(article => {
+                    article.style.display = 'none';
+                    article.style.backgroundColor = 'transparent';
+                });
+                
+                results.forEach(result => {
+                    result.element.style.display = 'block';
+                    result.element.style.backgroundColor = '#f9f9f9';
+                });
+            }
+            
+            // Mettre en surbrillance un article spécifique
+            function highlightSpecificArticle(article) {
+                articles.forEach(a => {
+                    a.style.backgroundColor = a === article ? '#e6f7ff' : 'transparent';
+                    a.style.display = 'block';
+                });
+                
+                // Faire défiler jusqu'à l'article
+                article.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+            
+            // Réinitialiser l'affichage des articles
+            function resetArticlesDisplay() {
+                articles.forEach(article => {
+                    article.style.display = 'block';
+                    article.style.backgroundColor = 'transparent';
+                });
+            }
+            
+            // Fermer les résultats quand on clique ailleurs
+            document.addEventListener('click', function(e) {
+                if (!searchResults.contains(e.target) && e.target !== searchInput) {
+                    searchResults.style.display = 'none';
+                }
             });
         });
 </script>
