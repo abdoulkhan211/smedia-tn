@@ -1,1 +1,341 @@
 
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admini - Cours bientôt disponibles</title>
+    <style>
+        /* Reset et variables CSS */
+        :root {
+            --primary: #25F4EE;
+            --secondary: #FE2C55;
+            --dark: #121212;
+            --light: #FFFFFF;
+            --gray: #A8A8A8;
+            --bg: #000000;
+            --card-bg: #1E1E1E;
+            --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: var(--font);
+            background-color: var(--bg);
+            color: var(--light);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Style TikTok pour la navigation */
+        .tiktok-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            z-index: 1000;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--gray);
+            font-size: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item.active {
+            color: var(--light);
+        }
+
+        .nav-icon {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+
+        /* Contenu principal */
+        .container {
+            padding: 20px;
+            padding-bottom: 80px; /* Pour éviter que le contenu soit caché par la nav */
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Carte de notification style TikTok */
+        .notification-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .notification-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .notification-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 24px;
+            color: white;
+        }
+
+        .notification-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .notification-time {
+            font-size: 12px;
+            color: var(--gray);
+            margin-top: 3px;
+        }
+
+        .notification-content {
+            font-size: 16px;
+            line-height: 1.5;
+            padding: 10px 0;
+        }
+
+        /* Style pour la montre */
+        .watch-container {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+        }
+
+        .watch {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--card-bg), #2a2a2a);
+            border: 8px solid #333;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5),
+                        inset 0 0 15px rgba(0, 0, 0, 0.5);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .watch-face {
+            width: 90%;
+            height: 90%;
+            border-radius: 50%;
+            background-color: var(--dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            color: var(--primary);
+            font-weight: bold;
+            text-align: center;
+            padding: 20px;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.8);
+        }
+
+        .watch-time {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .watch-date {
+            font-size: 12px;
+            color: var(--gray);
+        }
+
+        /* Boutons style TikTok */
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .tiktok-btn {
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .primary-btn {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: black;
+        }
+
+        .secondary-btn {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            backdrop-filter: blur(10px);
+        }
+
+        .tiktok-btn:hover {
+            transform: scale(1.05);
+            opacity: 0.9;
+        }
+
+        /* Animation de la montre */
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .watch {
+            animation: pulse 4s infinite ease-in-out;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+                padding-bottom: 70px;
+            }
+            
+            .notification-card {
+                padding: 15px;
+            }
+            
+            .watch {
+                width: 120px;
+                height: 120px;
+                border-width: 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Carte de notification -->
+        <div class="notification-card">
+            <div class="notification-header">
+                <div class="notification-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div>
+                    <div class="notification-title">Admini Formation</div>
+                    <div class="notification-time">Aujourd'hui · 10:42</div>
+                </div>
+            </div>
+            <div class="notification-content">
+                Désolé pour l'attente, les cours débuteront comme prévu. Préparez-vous pour une expérience d'apprentissage exceptionnelle!
+            </div>
+        </div>
+
+        <!-- Montre animée -->
+        <div class="watch-container">
+            <div class="watch">
+                <div class="watch-face">
+                    <div class="watch-time" id="current-time">10:42</div>
+                    <div class="watch-date" id="current-date">Lun 12 Juin</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Boutons d'action -->
+        <div class="action-buttons">
+            <a href="profil.html" class="tiktok-btn primary-btn">
+                <i class="fas fa-user"></i> Profil
+            </a>
+            <a href="#" class="tiktok-btn secondary-btn">
+                <i class="fas fa-bell"></i> Rappel
+            </a>
+        </div>
+    </div>
+
+    <!-- Navigation style TikTok -->
+    <nav class="tiktok-nav">
+        <a href="home.html" class="nav-item active">
+            <div class="nav-icon">
+                <i class="fas fa-home"></i>
+            </div>
+            <span>Accueil</span>
+        </a>
+       
+        <a href="profil.html" class="nav-item">
+            <div class="nav-icon">
+                <i class="fas fa-user"></i>
+            </div>
+            <span>Profil</span>
+        </a>
+    </nav>
+
+    <!-- Script pour l'heure actuelle -->
+    <script>
+        // Mise à jour de l'heure en temps réel
+        function updateTime() {
+            const now = new Date();
+            const timeElement = document.getElementById('current-time');
+            const dateElement = document.getElementById('current-date');
+            
+            // Formatage de l'heure
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            timeElement.textContent = `${hours}:${minutes}`;
+            
+            // Formatage de la date
+            const days = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'];
+            const months = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'];
+            const dayName = days[now.getDay()];
+            const dayNum = now.getDate();
+            const monthName = months[now.getMonth()];
+            dateElement.textContent = `${dayName} ${dayNum} ${monthName}`;
+        }
+
+        // Mettre à jour l'heure immédiatement puis toutes les minutes
+        updateTime();
+        setInterval(updateTime, 60000);
+
+        // Animation au clic sur les cartes
+        document.querySelectorAll('.notification-card').forEach(card => {
+            card.addEventListener('click', function() {
+                this.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 200);
+            });
+        });
+    </script>
+
+    <!-- Intégration de Font Awesome -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</body>
+</html>
