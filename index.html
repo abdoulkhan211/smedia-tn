@@ -1,4 +1,977 @@
-                // Effet parallaxe amélioré
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admini - Expert en Informatique & Web Design</title>
+    <style>
+        /* Reset amélioré */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --red: #ff3b30;
+            --green: #34c759;
+            --blue: #007aff;
+            --orange: #ff9500;
+            --dark: #1c1c1e;
+            --gray: #8e8e93;
+            --light: #f2f2f7;
+            --white: #ffffff;
+            --easing: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 
+                         'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Typographie iOS 18 */
+        h1, h2, h3, h4 {
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+        }
+
+        /* Animations premium */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* Fond dynamique premium */
+        .dynamic-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--red), var(--orange), var(--blue), var(--green));
+            background-size: 300% 300%;
+            animation: gradientFlow 18s ease infinite;
+            z-index: -2;
+            opacity: 0.08;
+            filter: blur(60px);
+        }
+
+        /* Barre de navigation premium */
+        .ios-navbar {
+            position: sticky;
+            top: 0;
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            background-color: rgba(242, 242, 247, 0.86);
+            padding: 18px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            border-bottom: 0.5px solid rgba(120, 120, 128, 0.18);
+            box-shadow: 0 1px 20px rgba(0, 0, 0, 0.03);
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--dark);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(45deg, var(--blue), var(--green));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.25);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 28px;
+        }
+
+        .nav-link {
+            position: relative;
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            transition: all 0.4s var(--easing);
+            padding: 8px 0;
+        }
+
+        .nav-link:hover {
+            color: var(--blue);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--blue), var(--green));
+            transition: width 0.4s var(--easing);
+            border-radius: 2px;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* Hero section premium */
+        .hero {
+            min-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 5%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            animation: fadeIn 1s var(--easing) forwards;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            margin-bottom: 24px;
+            background: linear-gradient(to right, var(--red), var(--orange), var(--green), var(--blue));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: float 6s var(--easing) infinite;
+            line-height: 1.1;
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            color: var(--gray);
+            margin-bottom: 40px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 16px 36px;
+            background: linear-gradient(45deg, var(--blue), var(--green));
+            color: white;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 18px;
+            transition: all 0.4s var(--easing);
+            box-shadow: 0 10px 30px rgba(0, 122, 255, 0.3);
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 122, 255, 0.4);
+            animation: pulse 1.5s var(--easing) infinite;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, var(--green), var(--blue));
+            opacity: 0;
+            transition: opacity 0.4s var(--easing);
+        }
+
+        .cta-button:hover::before {
+            opacity: 1;
+        }
+
+        .cta-button span {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Sections */
+        .section {
+            padding: 120px 5%;
+            position: relative;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 70px;
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(to right, var(--red), var(--orange), var(--green), var(--blue));
+            border-radius: 4px;
+        }
+
+        /* Grid amélioré */
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+        /* Cartes premium */
+        .card {
+            background: var(--white);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+            transition: all 0.5s var(--easing);
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeIn 0.8s var(--easing) forwards;
+            position: relative;
+            border: 0.5px solid rgba(120, 120, 128, 0.1);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(255,59,48,0.05), rgba(0,122,255,0.05));
+            opacity: 0;
+            transition: opacity 0.4s var(--easing);
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.12);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-image {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            transition: transform 0.5s var(--easing);
+        }
+
+        .card:hover .card-image {
+            transform: scale(1.05);
+        }
+
+        .card-content {
+            padding: 24px;
+        }
+
+        .card-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            background: linear-gradient(45deg, var(--red), var(--orange));
+            color: white;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .card-date {
+            color: var(--gray);
+            font-size: 14px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .card-title {
+            font-size: 20px;
+            margin-bottom: 12px;
+            color: var(--dark);
+        }
+
+        .card-text {
+            color: var(--gray);
+            margin-bottom: 20px;
+            font-size: 15px;
+        }
+
+        .card-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--blue);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s var(--easing);
+        }
+
+        .card-link:hover {
+            gap: 10px;
+            color: var(--green);
+        }
+
+        /* Section cours premium */
+        .courses-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .course-card .card-badge {
+            background: linear-gradient(45deg, var(--green), var(--blue));
+        }
+
+        /* Section contact premium */
+        .contact-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .contact-info {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.05);
+            border: 0.5px solid rgba(120, 120, 128, 0.1);
+        }
+
+        .contact-info h3 {
+            margin-bottom: 24px;
+            font-size: 24px;
+            color: var(--blue);
+            position: relative;
+            display: inline-block;
+        }
+
+        .contact-info h3::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(to right, var(--blue), var(--green));
+            border-radius: 3px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .contact-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(45deg, var(--light), #e5e5ea);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--blue);
+            font-size: 18px;
+            flex-shrink: 0;
+            transition: all 0.3s var(--easing);
+        }
+
+        .contact-item:hover .contact-icon {
+            background: linear-gradient(45deg, var(--blue), var(--green));
+            color: white;
+            transform: rotate(5deg);
+        }
+
+        .contact-text {
+            font-size: 16px;
+            color: var(--dark);
+        }
+
+        /* Formulaire premium */
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            position: relative;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 16px 20px;
+            border: 1px solid #d1d1d6;
+            border-radius: 14px;
+            background-color: var(--light);
+            font-size: 16px;
+            transition: all 0.3s var(--easing);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--blue);
+            background-color: var(--white);
+            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+        }
+
+        .form-textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        /* Footer premium */
+        footer {
+            background-color: var(--dark);
+            color: var(--white);
+            padding: 80px 5% 40px;
+            position: relative;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+        }
+
+        .footer-column h4 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: var(--white);
+            position: relative;
+            display: inline-block;
+        }
+
+        .footer-column h4::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: linear-gradient(to right, var(--blue), var(--green));
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .footer-link {
+            color: #a1a1a6;
+            text-decoration: none;
+            transition: all 0.3s var(--easing);
+            font-size: 15px;
+        }
+
+        .footer-link:hover {
+            color: var(--white);
+            transform: translateX(5px);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .social-link {
+            width: 44px;
+            height: 44px;
+            background: #2c2c2e;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            transition: all 0.3s var(--easing);
+        }
+
+        .social-link:hover {
+            transform: translateY(-5px);
+            background: linear-gradient(45deg, var(--blue), var(--green));
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid #2c2c2e;
+            color: #636366;
+            font-size: 14px;
+        }
+
+        /* Effets iOS premium */
+        .ios-hover {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ios-hover::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 70%);
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            transition: opacity 0.6s var(--easing);
+        }
+
+        .ios-hover:hover::after {
+            opacity: 1;
+        }
+
+        /* Animation au scroll */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s var(--easing);
+        }
+
+        .animate-on-scroll.animated {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive amélioré */
+        @media (max-width: 1024px) {
+            .section {
+                padding: 80px 5%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .ios-navbar {
+                padding: 15px 5%;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                min-height: auto;
+                padding: 120px 5% 80px;
+            }
+
+            .section-title::after {
+                bottom: -12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .card {
+                border-radius: 18px;
+            }
+
+            .contact-info {
+                padding: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Fond dynamique premium -->
+    <div class="dynamic-background"></div>
+    
+    <!-- Barre de navigation premium -->
+    <nav class="ios-navbar">
+        <a href="#" class="nav-logo">
+            <div class="logo-icon">
+                <i class="fas fa-code"></i>
+            </div>
+            <span>Admini</span>
+        </a>
+        <div class="nav-links">
+            <a href="#accueil" class="nav-link">Accueil</a>
+            <a href="#actualites" class="nav-link">Actualités</a>
+            <a href="#cours" class="nav-link">Cours</a>
+            <a href="#contact" class="nav-link">Contact</a>
+        </div>
+    </nav>
+
+    <!-- Section Hero premium -->
+    <section class="hero" id="accueil">
+        <div class="hero-content">
+            <h1>Expertise en Informatique & Web Design</h1>
+            <p>Découvrez les dernières innovations technologiques et maîtrisez les compétences en web design avec nos formations professionnelles adaptées à tous les niveaux.</p>
+            <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                <a href="signup.html" class="cta-button ios-hover">
+                    <span>Commencer à apprendre</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+                <a href="#actualites" class="cta-button ios-hover" style="background: linear-gradient(45deg, var(--dark), #2c2c2e); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);">
+                    <span>Voir les actualités</span>
+                    <i class="fas fa-newspaper"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Actualités premium -->
+    <section class="section" id="actualites">
+        <h2 class="section-title animate-on-scroll">Actualités Informatique</h2>
+        <div class="news-grid">
+            <div class="card ios-hover animate-on-scroll" style="animation-delay: 0.1s">
+                <img src="https://source.unsplash.com/random/600x400/?ai,technology" alt="IA" class="card-image">
+                <div class="card-content">
+                    <span class="card-badge">Nouveauté</span>
+                    <div class="card-date">
+                        <i class="far fa-calendar-alt"></i>
+                        15 Juin 2023
+                    </div>
+                    <h3 class="card-title">L'IA révolutionne le développement web</h3>
+                    <p class="card-text">Découvrez comment les nouveaux outils d'intelligence artificielle transforment la façon dont nous créons des sites web et applications.</p>
+                    <a href="#" class="card-link">
+                        Lire l'article
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="card ios-hover animate-on-scroll" style="animation-delay: 0.2s">
+                <img src="https://source.unsplash.com/random/600x400/?coding,programming" alt="Programmation" class="card-image">
+                <div class="card-content">
+                    <span class="card-badge" style="background: linear-gradient(45deg, var(--blue), var(--green))">Tendance</span>
+                    <div class="card-date">
+                        <i class="far fa-calendar-alt"></i>
+                        10 Juin 2023
+                    </div>
+                    <h3 class="card-title">Les frameworks JS à connaître en 2023</h3>
+                    <p class="card-text">Notre analyse des frameworks JavaScript les plus prometteurs cette année et comment choisir celui qui convient à vos projets.</p>
+                    <a href="#" class="card-link">
+                        Lire l'article
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="card ios-hover animate-on-scroll" style="animation-delay: 0.3s">
+                <img src="https://source.unsplash.com/random/600x400/?security,cyber" alt="Sécurité" class="card-image">
+                <div class="card-content">
+                    <span class="card-badge" style="background: linear-gradient(45deg, var(--orange), var(--red))">Important</span>
+                    <div class="card-date">
+                        <i class="far fa-calendar-alt"></i>
+                        5 Juin 2023
+                    </div>
+                    <h3 class="card-title">Sécurité web : les bonnes pratiques</h3>
+                    <p class="card-text">Les dernières menaces en cybersécurité et comment protéger efficacement vos applications et données sensibles.</p>
+                    <a href="#" class="card-link">
+                        Lire l'article
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Cours premium -->
+    <section class="section" id="cours">
+        <h2 class="section-title animate-on-scroll">Nos Cours de Web Design</h2>
+        <div class="courses-container">
+            <div class="card course-card ios-hover animate-on-scroll" style="animation-delay: 0.1s">
+                <img src="https://source.unsplash.com/random/600x400/?html,css,design" alt="HTML/CSS" class="card-image">
+                <div class="card-content">
+                    <span class="card-badge">Débutant</span>
+                    <h3 class="card-title">Maîtrise complète de HTML5 & CSS3</h3>
+                    <p class="card-text">Apprenez à créer des sites web modernes et responsives avec les dernières fonctionnalités de HTML5 et CSS3, y compris Flexbox et Grid.</p>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-weight: 600; color: var(--green);">Gratuit</span>
+                        <a href="#" class="card-link">
+                            S'inscrire
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card course-card ios-hover animate-on-scroll" style="animation-delay: 0.2s">
+                <img src="https://source.unsplash.com/random/600x400/?javascript,code" alt="JavaScript" class="card-image">
+                <div class="card-content">
+                    <span class="card-badge" style="background: linear-gradient(45deg, var(--green), var(--blue))">Intermédiaire</span>
+                    <h3 class="card-title">JavaScript Moderne (ES6+)</h3>
+                    <p class="card-text">Maîtrisez JavaScript avec les dernières syntaxes ES6+, les promesses, async/await et apprenez à créer des applications interactives.</p>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-weight: 600; color: var(--orange);">29,99€</span>
+                        <a href="#" class="card-link">
+                            S'inscrire
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card course-card ios-hover animate-on-scroll" style="animation-delay: 0.3s">
+                <img src="https://source.unsplash.com/random/600x400/?ui,ux,design" alt="UI/UX" class="card-image">
+                <div class="card-content">
+                    <span class="card-badge" style="background: linear-gradient(45deg, var(--blue), #5856d6))">Avancé</span>
+                    <h3 class="card-title">Design d'Interface Professionnel</h3>
+                    <p class="card-text">Créez des interfaces utilisateur exceptionnelles en apprenant les principes du design moderne, l'expérience utilisateur et les outils pro.</p>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-weight: 600; color: var(--red);">49,99€</span>
+                        <a href="#" class="card-link">
+                            S'inscrire
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Contact premium -->
+    <section class="section" id="contact">
+        <h2 class="section-title animate-on-scroll">Contactez Notre Équipe</h2>
+        <div class="contact-container">
+            <div class="contact-info animate-on-scroll" style="animation-delay: 0.1s">
+                <h3>Nos Coordonnées</h3>
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <div class="contact-text">Tahoua Niger, Quartier Joe Kalé</div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-phone-alt"></i>
+                    </div>
+                    <div class="contact-text">+227 77 68 02 77</div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="contact-text">androminapp@gmail.com</div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="contact-text">Lundi-Vendredi: 9h-17h</div>
+                </div>
+                
+                <h3 style="margin-top: 40px;">Réseaux Sociaux</h3>
+                <div class="social-links">
+                    <a href="#" class="social-link" aria-label="Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" class="social-link" aria-label="Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="social-link" aria-label="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="social-link" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="contact-info animate-on-scroll" style="animation-delay: 0.2s">
+                <h3>Envoyez un Message</h3>
+                <form class="contact-form" id="contactForm">
+                    <div class="form-group">
+                        <input type="text" class="form-input" placeholder="Votre nom" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" class="form-input" placeholder="Votre email" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-input" placeholder="Sujet">
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-input form-textarea" placeholder="Votre message" required></textarea>
+                    </div>
+                    <button type="submit" class="cta-button ios-hover" style="width: 100%;">
+                        <span>Envoyer le message</span>
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer premium -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-column">
+                <h4>Admini</h4>
+                <p style="color: #a1a1a6; margin-top: 20px; font-size: 15px; line-height: 1.6;">
+                    Votre partenaire en formation informatique et développement web, offrant des ressources de qualité pour votre croissance professionnelle.
+                </p>
+            </div>
+            
+            <div class="footer-column">
+                <h4>Liens rapides</h4>
+                <div class="footer-links">
+                    <a href="#accueil" class="footer-link">Accueil</a>
+                    <a href="#actualites" class="footer-link">Actualités</a>
+                    <a href="#cours" class="footer-link">Cours</a>
+                    <a href="#contact" class="footer-link">Contact</a>
+                </div>
+            </div>
+            
+            <div class="footer-column">
+                <h4>Ressources</h4>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">Blog</a>
+                    <a href="#" class="footer-link">Tutoriels</a>
+                    <a href="#" class="footer-link">Documentation</a>
+                    <a href="#" class="footer-link">FAQ</a>
+                </div>
+            </div>
+            
+            <div class="footer-column">
+                <h4>Légal</h4>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">Mentions légales</a>
+                    <a href="#" class="footer-link">Confidentialité</a>
+                    <a href="#" class="footer-link">Conditions</a>
+                    <a href="#" class="footer-link">Cookies</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            &copy; 2023 Admini. Tous droits réservés. Conçu avec passion à Tahoua, Niger.
+        </div>
+    </footer>
+
+    <script>
+        // Animation au scroll améliorée
+        document.addEventListener('DOMContentLoaded', function() {
+            // Observateur d'intersection pour les animations
+            const animateElements = document.querySelectorAll('.animate-on-scroll');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animated');
+                        // Ajoute un délai basé sur l'attribut data-delay
+                        const delay = entry.target.getAttribute('data-delay') || 0;
+                        entry.target.style.transitionDelay = `${delay}ms`;
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -100px 0px'
+            });
+
+            animateElements.forEach(element => {
+                observer.observe(element);
+            });
+
+            // Effet de survol iOS premium
+            const iosHovers = document.querySelectorAll('.ios-hover');
+            iosHovers.forEach(element => {
+                element.addEventListener('mousemove', (e) => {
+                    const rect = element.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    element.style.setProperty('--mouse-x', `${x}px`);
+                    element.style.setProperty('--mouse-y', `${y}px`);
+                });
+            });
+
+            // Gestion du formulaire de contact
+            const contactForm = document.getElementById('contactForm');
+            if (contactForm) {
+                contactForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    // Afficher l'état de chargement
+                    const submitButton = contactForm.querySelector('button[type="submit"]');
+                    const originalContent = submitButton.innerHTML;
+                    submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Envoi en cours...';
+                    submitButton.disabled = true;
+                    
+                    // Simuler l'envoi (remplacer par un vrai appel AJAX en production)
+                    setTimeout(() => {
+                        // Afficher le message de succès
+                        contactForm.innerHTML = `
+                            <div style="text-align: center; padding: 40px 20px; animation: fadeIn 0.6s var(--easing);">
+                                <div style="width: 80px; height: 80px; background: linear-gradient(45deg, var(--green), var(--blue)); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                                    <i class="fas fa-check" style="font-size: 36px; color: white;"></i>
+                                </div>
+                                <h3 style="margin-bottom: 10px; font-size: 24px; color: var(--dark);">Message envoyé!</h3>
+                                <p style="color: var(--gray);">Nous avons bien reçu votre message et vous répondrons dans les plus brefs délais.</p>
+                                <button onclick="location.reload()" style="margin-top: 30px; background: none; border: none; color: var(--blue); font-weight: 600; cursor: pointer;">
+                                    <i class="fas fa-arrow-left"></i> Retour
+                                </button>
+                            </div>
+                        `;
+                    }, 1500);
+                });
+            }
+
+                            // Effet parallaxe amélioré
                 window.addEventListener('scroll', function() {
                     const scrollPosition = window.pageYOffset;
                     const dynamicBg = document.querySelector('.dynamic-background');
