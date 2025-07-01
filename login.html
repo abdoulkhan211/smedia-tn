@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #007AFF;
+            --secondary-color: #34C759;
+            --error-color: #FF3B30;
+            --text-color: #1C1C1E;
+            --light-text: #8E8E93;
+            --background: #F2F2F7;
+            --card-background: #FFFFFF;
+            --border-color: #D1D1D6;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        
+        body {
+            background-color: var(--background);
+            color: var(--text-color);
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .logo-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .logo {
+            max-width: 120px;
+            height: auto;
+        }
+        
+        main {
+            width: 100%;
+            max-width: 500px;
+            background: var(--card-background);
+            border-radius: 14px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            opacity: 1;
+        }
+        
+        h1 {
+            font-size: 24px;
+            text-align: center;
+            color: var(--text-color);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .subtitle {
+            font-size: 16px;
+            color: var(--light-text);
+            text-align: center;
+            margin-bottom: 24px;
+            font-weight: 400;
+        }
+        
+        .form-group {
+            margin-bottom: 16px;
+            position: relative;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            color: var(--text-color);
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .input-with-icon {
+            position: relative;
+        }
+        
+        .input-with-icon i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--light-text);
+            font-size: 18px;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 14px 16px 14px 48px;
+            background: var(--card-background);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-color);
+            font-size: 16px;
+            transition: all 0.2s ease;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.1);
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--light-text);
+            cursor: pointer;
+            font-size: 18px;
+        }
+        
+        .error-message {
+            color: var(--error-color);
+            font-size: 13px;
+            margin-top: 4px;
+            display: none;
+        }
+        
+        .form-control.error {
+            border-color: var(--error-color);
+        }
+        
+        .form-control.error:focus {
+            box-shadow: 0 0 0 2px rgba(255, 59, 48, 0.1);
+        }
+        
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            font-size: 14px;
+        }
+        
+        .remember-me {
+            display: flex;
+            align-items: center;
+        }
+        
+        .remember-me input {
+            margin-right: 8px;
+            accent-color: var(--primary-color);
+        }
+        
+        .forgot-password {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+        
+        .auth-btn {
+            width: 100%;
+            padding: 16px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 24px;
+        }
+        
+        .auth-btn:hover {
+            background-color: #0066CC;
+        }
+        
+        .auth-btn:active {
+            transform: scale(0.98);
+        }
+        
+        .alternative-auth {
+            margin-top: 24px;
+            text-align: center;
+        }
+        
+        .alt-title {
+            position: relative;
+            color: var(--light-text);
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        
+        .alt-title::before, .alt-title::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 30%;
+            height: 1px;
+            background-color: var(--border-color);
+        }
+        
+        .alt-title::before {
+            left: 0;
+        }
+        
+        .alt-title::after {
+            right: 0;
+        }
+        
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 16px;
+        }
+        
+        .social-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--card-background);
+            color: var(--text-color);
+            font-size: 20px;
+            transition: all 0.2s ease;
+            border: 1px solid var(--border-color);
+        }
+        
+        .social-icon:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        
+        .social-icon:nth-child(1):hover {
+            color: #DB4437;
+            border-color: #DB4437;
+        }
+        
+        .social-icon:nth-child(2):hover {
+            color: #0078D7;
+            border-color: #0078D7;
+        }
+        
+        .social-icon:nth-child(3):hover {
+            color: #000000;
+            border-color: #000000;
+        }
+        
+        .social-icon:nth-child(4):hover {
+            color: #4078C0;
+            border-color: #4078C0;
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 16px;
+            }
+            
+            main {
+                padding: 24px 20px;
+            }
+        }
+        
+        .signup-link {
+            text-align: center;
+            margin-top: 24px;
+            font-size: 15px;
+        }
+        
+        .signup-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .signup-link a:hover {
+            text-decoration: underline;
+        }
+        
+        .login-error {
+            color: var(--error-color);
+            text-align: center;
+            margin-bottom: 16px;
+            display: none;
+        }
+        
+        .success-message {
+            color: var(--secondary-color);
+            text-align: center;
+            margin-bottom: 16px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <div class="logo-container">
+            <img src="./mini.png" alt="Logo" class="logo">
+        </div>
+        
+        <h1>Connexion</h1>
+        <p class="subtitle">Entrez vos informations pour vous connecter</p>
+        
+        <div class="login-error" id="loginError">
+            Email ou mot de passe incorrect
+        </div>
+        
+        <div class="success-message" id="successMessage">
+            Connexion réussie! Redirection en cours...
+        </div>
+        
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="email">Adresse email</label>
+                <div class="input-with-icon">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="email" class="form-control" placeholder="Entrez votre email" required>
+                </div>
+                <span class="error-message" id="email-error">Veuillez entrer une adresse email valide</span>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Mot de passe</label>
+                <div class="input-with-icon">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="password" class="form-control" placeholder="Entrez votre mot de passe" required>
+                    <button type="button" class="password-toggle" id="togglePassword">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                <span class="error-message" id="password-error">Veuillez entrer votre mot de passe</span>
+            </div>
+            
+            <div class="remember-forgot">
+                <div class="remember-me">
+                    <input type="checkbox" id="remember">
+                    <label for="remember">Se souvenir de moi</label>
+                </div>
+                <a href="#" class="forgot-password">Mot de passe oublié ?</a>
+            </div>
+            
+            <button type="submit" class="auth-btn">
+                <i class="fas fa-sign-in-alt"></i> Se connecter
+            </button>
+        </form>
+        
+        <div class="alternative-auth">
+            <p class="alt-title">Ou continuer avec</p>
+            <div class="social-icons">
+                <a href="#" class="social-icon">
+                    <i class="fab fa-google"></i>
+                </a>
+                <a href="#" class="social-icon">
+                    <i class="fab fa-microsoft"></i>
+                </a>
+                <a href="#" class="social-icon">
+                    <i class="fab fa-apple"></i>
+                </a>
+                <a href="#" class="social-icon">
+                    <i class="fab fa-github"></i>
+                </a>
+            </div>
+        </div>
+        
+        <div class="signup-link">
+            Pas encore de compte ? <a href="signup.html">Créer un compte</a>
+        </div>
+    </main>
+
+    <script>
+        // Fonction pour basculer la visibilité du mot de passe
+        function togglePasswordVisibility(inputId, toggleId) {
+            const passwordInput = document.getElementById(inputId);
+            const toggleButton = document.getElementById(toggleId);
+            
+            toggleButton.addEventListener('click', function() {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                toggleButton.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+            });
+        }
+        
+        // Activer le basculement pour le champ de mot de passe
+        togglePasswordVisibility('password', 'togglePassword');
+        
+        // Vérifier si l'utilisateur est déjà connecté
+        function checkLoggedIn() {
+            if (localStorage.getItem('loggedIn') === 'true') {
+                window.location.href = 'home.html';
+            }
+        }
+        
+        // Vérifier au chargement de la page
+        window.addEventListener('DOMContentLoaded', checkLoggedIn);
+        
+        // Vérifier les informations de connexion
+        function checkCredentials(email, password) {
+            const accounts = JSON.parse(localStorage.getItem('userAccounts') || '[]');
+            return accounts.find(account => account.email === email && account.password === password);
+        }
+        
+        // Validation du formulaire
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            let isValid = true;
+            
+            // Validation de l'email
+            const email = document.getElementById('email');
+            const emailError = document.getElementById('email-error');
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email.value)) {
+                email.classList.add('error');
+                emailError.style.display = 'block';
+                isValid = false;
+            } else {
+                email.classList.remove('error');
+                emailError.style.display = 'none';
+            }
+            
+            // Validation du mot de passe
+            const password = document.getElementById('password');
+            const passwordError = document.getElementById('password-error');
+            if (password.value === '') {
+                password.classList.add('error');
+                passwordError.style.display = 'block';
+                isValid = false;
+            } else {
+                password.classList.remove('error');
+                passwordError.style.display = 'none';
+            }
+            
+            // Si tout est valide, vérifier les identifiants
+            if (isValid) {
+                const user = checkCredentials(email.value, password.value);
+                if (user) {
+                    // Enregistrer l'utilisateur connecté
+                    localStorage.setItem('currentUser', JSON.stringify(user));
+                    localStorage.setItem('loggedIn', 'true');
+                    
+                    // Afficher le message de succès
+                    document.getElementById('successMessage').style.display = 'block';
+                    document.getElementById('loginError').style.display = 'none';
+                    
+                    // Rediriger vers la page d'accueil
+                    setTimeout(() => {
+                        window.location.href = 'home.html';
+                    }, 1500);
+                } else {
+                    document.getElementById('loginError').style.display = 'block';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
